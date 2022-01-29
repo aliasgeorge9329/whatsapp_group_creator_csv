@@ -1,0 +1,18 @@
+{
+  "name": "whatsapp_group_creator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "ALIAS GEORGE",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "nodemon": "^2.0.15",
+    "prompt-sync": "^4.2.0",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.15.4"
+  }
+}
