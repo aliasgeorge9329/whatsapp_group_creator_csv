@@ -18,4 +18,4 @@
 
 ## Screenshots
 
-(screenshot.png)
+![Alt text](screenshot.png)
