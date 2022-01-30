@@ -16,31 +16,7 @@ fs.createReadStream("contact.csv")
   .on("data", (data) => contacts.push(data["Phone_Number"]))
   .on("end", () => {});
 
-// Path where the session data will be stored
-const SESSION_FILE_PATH = "./session.json";
-
-// Load the session data if it has been previously saved
-let sessionCfg;
-if (fs.existsSync(SESSION_FILE_PATH)) {
-  sessionCfg = require(SESSION_FILE_PATH);
-}
-
-// Use the saved values
-const client = new Client({
-  puppeteer: { headless: false },
-  session: sessionCfg,
-});
-
-// Save session values to the file upon successful auth
-client.on("authenticated", (session) => {
-  console.log("youre in");
-  sessionData = session;
-  fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
-});
+const client = new Client();
 
 client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
@@ -64,7 +40,7 @@ async function createGroup() {
         notwauser.push(contacts[i]);
     }
   }
-  console.log(`These Numbers are not Registered in Whatsapp\n${notwauser}`);
+  console.log(`\nThese Numbers are not Registered in Whatsapp\n${notwauser}\n`);
 
   contacts = contacts.filter((each) => notwauser.indexOf(each) == -1);
   let res = await client.createGroup(`${name.trim()}`, contacts);
@@ -74,7 +50,7 @@ async function createGroup() {
 }
 
 async function AddFailed(invitationlink) {
-  console.log(failed);
+  console.log(`\n\nWhatsapp invitations Group sent to \n${failed}\n\n`);
   for (i = 0; i < failed.length; i++) {
     try {
       await client.sendMessage(
@@ -82,10 +58,9 @@ async function AddFailed(invitationlink) {
         `https://chat.whatsapp.com/${invitationlink}`
       );
     } catch {
-      console.log(`Invitation Link Not sent to ${failed[i]}`);
+      console.log(`\nInvitation Link Not sent to ${failed[i]}`);
     }
   }
-  fs.unlink(SESSION_FILE_PATH, () => {});
   await timer(2000);
   exit(0);
 }
